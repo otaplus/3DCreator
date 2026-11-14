@@ -1,0 +1,24 @@
+# Dependencias
+node_modules/
+
+# Compilación y paquetes
+dist/
+release/
+
+# Registros y cachés
+*.log
+npm-debug.log*
+.npm/
+.eslintcache
+.cache/
+
+# Pruebas y capturas locales
+test-output/
+*.shot.png
+screenshots/
+
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

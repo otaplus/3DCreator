@@ -1,0 +1,49 @@
+{
+  "name": "creador-3d",
+  "version": "1.0.0",
+  "description": "Creador 3D — un estudio de creación 3D inspirado en Paint 3D, en español y para toda la familia.",
+  "main": "electron/main.cjs",
+  "desktopName": "creador-3d.desktop",
+  "author": "Creador 3D",
+  "license": "MIT",
+  "scripts": {
+    "build": "node build.mjs",
+    "start": "npm run build && electron .",
+    "dev": "npm run build && electron . --dev",
+    "test:ui": "npm run build && node electron/screenshot.cjs",
+    "dist": "npm run build && electron-builder --linux AppImage",
+    "install:local": "bash scripts/instalar.sh",
+    "uninstall:local": "bash scripts/desinstalar.sh"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "electron": "^45.3.2",
+    "electron-builder": "^26.18.0",
+    "esbuild": "^0.28.2",
+    "opentype.js": "^2.0.0"
+  },
+  "build": {
+    "appId": "org.creador3d.app",
+    "productName": "Creador 3D",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/main.cjs",
+      "electron/preload.cjs",
+      "build/icon.png",
+      "package.json"
+    ],
+    "linux": {
+      "target": "AppImage",
+      "category": "Graphics",
+      "icon": "build/icon.png",
+      "syncDesktopName": true,
+      "synopsis": "Estudio de creación 3D para toda la familia",
+      "description": "Crea, pinta y decora modelos 3D con plantillas, doodles, stickers y texto. Inspirado en Paint 3D."
+    }
+  }
+}

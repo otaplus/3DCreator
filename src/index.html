@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: blob:; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob:;">
+  <title>Creador 3D — Mi creación</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <header id="topbar">
+      <div class="brand">
+        <img class="brand-icon" src="assets/icon-256.png" alt="" draggable="false">
+        <div class="brand-text">
+          <h1>Creador 3D</h1>
+          <span>tu estudio de creación</span>
+        </div>
+      </div>
+
+      <div class="project-title">
+        <span class="project-dot"></span>
+        <input id="projectName" type="text" maxlength="60" value="Mi creación" aria-label="Nombre de la creación" spellcheck="false">
+        <span id="saveState" class="save-state" title="Guardado automático">Guardado</span>
+      </div>
+
+      <div class="top-actions" id="topActions"></div>
+    </header>
+
+    <div id="workspace">
+      <nav id="toolbar" aria-label="Herramientas"></nav>
+
+      <aside id="options" class="side-panel" aria-label="Opciones de la herramienta">
+        <div id="optionsInner"></div>
+      </aside>
+
+      <main id="viewport">
+        <canvas id="scene" aria-label="Escena 3D"></canvas>
+
+        <div id="viewTop">
+          <div class="segmented" id="modeBar" role="group" aria-label="Modo de transformación"></div>
+          <div id="selectionChip" class="selection-chip hidden"></div>
+        </div>
+
+        <div id="hintBar" class="hint-bar"></div>
+
+        <div id="zoomBar" class="zoom-bar" role="group" aria-label="Cámara"></div>
+
+        <div id="loading" class="loading">
+          <div class="loading-mark"></div>
+          <p>Preparando el estudio…</p>
+        </div>
+      </main>
+
+      <aside id="inspector" class="side-panel" aria-label="Propiedades del objeto">
+        <div id="inspectorInner"></div>
+      </aside>
+    </div>
+
+    <footer id="statusbar">
+      <div id="statusLeft"></div>
+      <div id="statusRight"></div>
+    </footer>
+  </div>
+
+  <div id="toasts" aria-live="polite"></div>
+  <div id="modalRoot" class="modal-root hidden"></div>
+  <input id="filePicker" type="file" hidden>
+
+  <script src="app.js"></script>
+</body>
+</html>
