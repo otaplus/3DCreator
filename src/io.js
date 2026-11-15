@@ -117,6 +117,36 @@ export async function appInfo() {
   return { version: '1.0.0', browser: true };
 }
 
+export async function checkForUpdates() {
+  if (desktop && desktop.isDesktop && desktop.checkUpdates) return desktop.checkUpdates();
+  return {
+    status: 'browser',
+    currentVersion: '1.0.0',
+    message: 'Las actualizaciones automáticas están disponibles en la aplicación de escritorio.',
+  };
+}
+
+export async function installUpdate() {
+  if (desktop && desktop.isDesktop && desktop.installUpdate) return desktop.installUpdate();
+  return { ok: false, reason: 'browser', message: 'Instala la versión de escritorio para actualizar automáticamente.' };
+}
+
+export async function cancelUpdate() {
+  if (desktop && desktop.isDesktop && desktop.cancelUpdate) return desktop.cancelUpdate();
+  return { ok: false };
+}
+
+export function onUpdateProgress(callback) {
+  if (desktop && desktop.isDesktop && desktop.onUpdateProgress) return desktop.onUpdateProgress(callback);
+  return () => {};
+}
+
+export async function openReleasesPage() {
+  if (desktop && desktop.isDesktop && desktop.openReleases) return desktop.openReleases();
+  window.open('https://github.com/otaplus/3DCreator/releases', '_blank', 'noopener');
+  return { ok: true };
+}
+
 export function displayPath(filePath) {
   if (!filePath) return '';
   const parts = String(filePath).split(/[\\/]/);

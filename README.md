@@ -1,6 +1,6 @@
 # Creador 3D
 
-Un estudio de creación 3D para Linux, en español y pensado para que cualquiera —también un niño de 12 años— pueda empezar a crear sin instrucciones complicadas. Está inspirado en Paint 3D, pero no necesita cuenta, conexión a internet ni conocimientos de modelado.
+Un estudio de creación 3D para Linux, en español y pensado para que cualquiera —también un niño de 12 años— pueda empezar a crear sin instrucciones complicadas. Toma lo mejor de Paint 3D para seleccionar y transformar objetos, y añade una línea de tiempo con fotogramas clave inspirada en Blender para animarlos. No necesita cuenta, conexión a internet ni conocimientos de modelado.
 
 ![Hecho con Electron y Three.js](https://img.shields.io/badge/Electron%20%2B%20Three.js-3D-6c5ce7) ![Idioma: español](https://img.shields.io/badge/Idioma-espa%C3%B1ol-ff8a5c) ![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-17c3a2)
 
@@ -10,12 +10,14 @@ Un estudio de creación 3D para Linux, en español y pensado para que cualquiera
 - **Añadir formas:** 12 primitivas (cubo, esfera, cilindro, cono, dona, cápsula, pirámide, prisma, estrella, corazón, diamante y rampa), todas redimensionables.
 - **Pintar en 3D:** pinta directamente sobre los objetos con pincel o borrador, elige colores, patrones y materiales (mate, satinado, brillante, metal, cristal y neón).
 - **Dibujar en el aire:** crea tubos 3D con la herramienta Doodle.
-- **Decorar:** añade stickers con emojis o sube tus propias imágenes, y escribe texto 3D con tildes y eñes.
+- **Decorar:** añade pegatinas con emojis o tus propias imágenes **sobre la superficie de los objetos**; se quedan pegadas, se mueven con el objeto y puedes arrastrarlas por encima para colocarlas. También puedes escribir texto 3D con tildes y eñes.
 - **Editor de dibujo 2D:** dibuja con pincel, rellena el fondo, añade stickers y texto, quita el fondo mágicamente y lleva el dibujo a la escena como un objeto 3D.
-- **Mover, girar y escalar:** con un gizmo de flechas, anillos y cuadros; también puedes duplicar, borrar y cambiar de color.
+- **Seleccionar y transformar como en Paint 3D:** arrastra con el botón izquierdo en el vacío para dibujar un recuadro y elegir varios objetos; el botón central (rueda) gira la vista. Al seleccionar aparece una **caja 2D** con 8 cuadraditos para redimensionar y cuatro círculos: **Z arriba**, **X derecha**, **Y abajo** y **profundidad a la izquierda**. Mantén `Shift` al girar para ajustar a 15°.
+- **Editar como en Paint 3D:** cortar, copiar, pegar, girar 90° a izquierda/derecha, espejo horizontal, espejo vertical, agrupar y separar. Con varios objetos elegidos, todo se transforma como si fuera uno solo.
+- **Animar con línea de tiempo:** fotogramas clave de posición, giro, tamaño y visibilidad; reproducción con bucle, velocidad y auto-clave; pistas por objeto; control de **FPS**; navegación fotograma a fotograma; **fotogramas en blanco** para espaciar la animación y claves que se arrastran en el tiempo.
 - **Cambiar la escena:** seis ambientes (estudio, atardecer, océano, bosque, espacio y nieve), suelo, cuadrícula y vistas de cámara.
-- **Guardar sin miedo:** autoguardado en el equipo, deshacer y rehacer, y proyectos `.c3d` que puedes abrir cuando quieras.
-- **Exportar:** imagen PNG, modelo GLB, modelo OBJ o modelo STL para imprimir en 3D.
+- **Guardar sin miedo:** autoguardado en el equipo, deshacer y rehacer, y proyectos `.c3d` que puedes abrir cuando quieras (también guardan la animación).
+- **Exportar:** imagen PNG, modelo GLB, modelo OBJ, modelo STL para imprimir en 3D o un vídeo WebM de la animación.
 - **Sonidos suaves y ayuda integrada**, con una interfaz grande, colorida y en español.
 
 ## Requisitos
@@ -95,9 +97,16 @@ npm run build
 | Acción | Atajo |
 | --- | --- |
 | Elegir / seleccionar | `V` |
-| Mover / girar / escalar | `G` / `R` / `S` |
+| Mover / girar / escalar con el gizmo clásico | `G` / `R` / `S` |
 | Herramientas de la barra | `1` … `9` |
+| Elegir todo | `Ctrl` + `A` |
+| Copiar / cortar / pegar | `Ctrl` + `C` / `Ctrl` + `X` / `Ctrl` + `V` |
 | Duplicar lo seleccionado | `Ctrl` + `D` |
+| Agrupar / separar | `Ctrl` + `G` / `Ctrl` + `Mayús` + `G` |
+| Mover lo elegido con las flechas | `←` `→` `↑` `↓` |
+| Enfocar la cámara en lo elegido | `F` |
+| Reproducir o pausar la animación | `Espacio` |
+| Añadir un fotograma clave | `K` |
 | Borrar lo seleccionado | `Supr` |
 | Deshacer | `Ctrl` + `Z` |
 | Rehacer | `Ctrl` + `Mayús` + `Z` o `Ctrl` + `Y` |
@@ -106,19 +115,29 @@ npm run build
 | Cerrar diálogo / quitar selección | `Esc` |
 | Pantalla completa | `F11` |
 
-Con el ratón: arrastra con el botón izquierdo para girar la vista, usa la rueda para acercar o alejar y el botón derecho para desplazarte.
+Con el ratón: **arrastra en el vacío con el botón izquierdo para dibujar un recuadro y seleccionar varios objetos**, y arrastra un objeto para moverlo arriba/abajo e izquierda/derecha. El **botón central** (rueda) gira la vista, la rueda acerca o aleja y el botón derecho desplaza. Al elegir un objeto aparece la caja 2D de Paint 3D: los cuadraditos redimensionan, el círculo **Z** de arriba gira en el plano, el **X** de la derecha inclina, el **Y** de abajo gira a izquierda/derecha y el círculo **izquierdo** cambia la profundidad. En el panel de propiedades tienes además **girar 90°**, **espejo H/V**, **cortar/copiar/pegar** y **agrupar**. Con `Ctrl` o `Mayús` y un clic añades o quitas objetos de la selección.
+
+## Animar en cuatro pasos
+
+1. Elige un objeto y pulsa **Animar** en la barra superior. Aparece la línea de tiempo.
+2. Con el cabezal en `0 s`, pulsa **◆ Clave**. Ese es el primer fotograma.
+3. Mueve el cabezal a otro segundo, mueve, gira o escala el objeto y pulsa otra vez **◆ Clave**.
+4. Pulsa **Espacio** para verlo. Puedes arrastrar las claves, borrarlas con doble clic, activar **Auto** para que se graben solas o exportar **Animación WebM** desde el menú **Exportar**. En la barra inferior tienes **FPS**, el campo **Fotograma**, los botones **⏮ ◀ ▶ ⏭**, **◆ Clave**, **+ Fotograma** (añade un fotograma en blanco al final) y **Blanco** (inserta un fotograma en blanco en la posición actual y desplaza el resto).
+
+La animación se guarda dentro del proyecto `.c3d` y del autoguardado; también entra en el historial de deshacer.
 
 ## Formatos de archivo
 
 | Formato | Para qué sirve |
 | --- | --- |
-| `.c3d` | Proyecto completo de Creador 3D (escena, pintura, materiales y cámara). Se abre con **Abrir**. |
+| `.c3d` | Proyecto completo de Creador 3D (escena, pintura, materiales, cámara y animación). Se abre con **Abrir**. |
 | `.png` | Foto de la escena en 1920 × 1200, con stickers y fondo. |
 | `.glb` | Modelo 3D con materiales y texturas, para otros programas y motores de juegos. |
 | `.obj` | Formato 3D clásico de geometría y materiales básicos. |
 | `.stl` | Geometría binaria lista para laminar e imprimir en 3D. |
+| `.webm` | Vídeo de la animación, con la cámara y los fotogramas clave actuales. |
 
-Los stickers e imágenes decorativas se incluyen en el PNG, pero no en los modelos 3D exportados.
+Los stickers e imágenes decorativas se incluyen en el PNG y en el vídeo WebM, pero no en los modelos 3D exportados.
 
 ## Dónde se guarda todo
 
@@ -132,6 +151,9 @@ Los stickers e imágenes decorativas se incluyen en el PNG, pero no en los model
 3DCreator/
 ├── src/                 Interfaz, escena Three.js y herramientas
 │   ├── main.js          Arranque, UI, selección, pintura, historial y pruebas
+│   ├── animation.js     Motor de animación: pistas, claves e interpolación
+│   ├── manipulator.js   Anillo, esquinas y flecha de selección estilo Paint 3D
+│   ├── timeline.js      Línea de tiempo, reproducción y edición de claves
 │   ├── shapes.js        Primitivas, materiales, texto, stickers y doodles
 │   ├── templates.js     Las 12 plantillas y sus piezas
 │   ├── textures.js      Paleta, patrones, emojis y capa de pintura UV
@@ -153,7 +175,7 @@ Los stickers e imágenes decorativas se incluyen en el PNG, pero no en los model
 npm run test:ui
 ```
 
-El comando compila la app, la abre en Electron, recorre plantillas, formas, pintura, doodles, texto, deshacer/rehacer, guardado, exportaciones y el editor 2D, y escribe capturas y un informe en `/tmp/opencode/c3d-test`. También se puede abrir `dist/index.html` directamente para comprobar el modo navegador.
+El comando compila la app, la abre en Electron, recorre plantillas, formas, pintura, doodles, texto, deshacer/rehacer, guardado, exportaciones y el editor 2D, y escribe capturas y un informe en `/tmp/opencode/c3d-test`. La API interna `window.__C3D__` también permite probar la selección múltiple, el manipulador, los fotogramas clave y la reproducción. Las pruebas usan un perfil temporal aparte, así que no tocan tus creaciones guardadas. También se puede abrir `dist/index.html` directamente para comprobar el modo navegador.
 
 ## Problemas frecuentes
 

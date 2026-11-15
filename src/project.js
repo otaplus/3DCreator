@@ -2,8 +2,10 @@ import * as THREE from 'three';
 import {
   createPrimitive, createTextMesh, createEmojiSticker, createImageSticker,
   createImagePlane, createDoodle, serializeMaterial, createMaterial,
+  createEmojiDecal, createImageDecal,
 } from './shapes.js';
 import { createPaintLayer } from './textures.js';
+import { ensureUid } from './animation.js';
 
 const round = (n) => Math.round(n * 1000) / 1000;
 
@@ -37,6 +39,7 @@ export function serializeNode(obj) {
   const meta = obj.userData.meta;
   if (!meta) return null;
   const node = {
+    uid: ensureUid(obj),
     name: obj.name,
     meta: { ...meta },
     pos: [round(obj.position.x), round(obj.position.y), round(obj.position.z)],
@@ -44,11 +47,11 @@ export function serializeNode(obj) {
     scale: [round(obj.scale.x), round(obj.scale.y), round(obj.scale.z)],
   };
   if (obj.visible === false) node.hidden = true;
-  if (obj.isMesh) {
+  if (obj.isMesh && !meta.decal) {
     node.material = serializeMaterial(obj.material);
     if (obj.userData.paint) node.paint = serializePaint(obj.userData.paint);
   }
-  if (obj.isGroup) {
+  if (obj.children && obj.children.length) {
     node.children = obj.children.map(serializeNode).filter(Boolean);
   }
   return node;
@@ -100,7 +103,10 @@ export function deserializeNode(node) {
         break;
       }
       case 'sticker': {
-        if (meta.emoji) obj = createEmojiSticker(meta.emoji, { scale: node.scale?.[0] || 1.35 });
+        if (meta.decal) {
+          if (meta.emoji) obj = createEmojiDecal(meta.emoji, { size: meta.size });
+          else if (meta.dataUrl) obj = createImageDecal(meta.dataUrl, { aspect: meta.aspect || 1, size: meta.size, name: node.name });
+        } else if (meta.emoji) obj = createEmojiSticker(meta.emoji, { scale: node.scale?.[0] || 1.35 });
         else if (meta.dataUrl) obj = createImageSticker(meta.dataUrl, { aspect: meta.aspect || 1, scale: node.scale?.[1] || 1.8 });
         break;
       }
@@ -112,10 +118,6 @@ export function deserializeNode(node) {
       case 'group': {
         obj = new THREE.Group();
         obj.userData.meta = { ...meta };
-        (node.children || []).forEach((child) => {
-          const c = deserializeNode(child);
-          if (c) obj.add(c);
-        });
         break;
       }
       default:
@@ -127,11 +129,19 @@ export function deserializeNode(node) {
   }
   if (!obj) return null;
   obj.name = node.name || obj.name;
+  if (node.uid) obj.userData.uid = node.uid;
+  else ensureUid(obj);
   if (node.pos) obj.position.fromArray(node.pos);
   if (node.quat) obj.quaternion.fromArray(node.quat);
   if (node.scale) obj.scale.fromArray(node.scale);
   if (node.hidden) obj.visible = false;
   if (node.paint) attachPaint(obj, deserializePaint(node.paint));
+  if (node.children && node.children.length) {
+    node.children.forEach((child) => {
+      const c = deserializeNode(child);
+      if (c) obj.add(c);
+    });
+  }
   return obj;
 }
 
@@ -142,14 +152,16 @@ export function serializeScene(objects, settings) {
   };
 }
 
-export function createProjectData(name, objects, settings, camera, target) {
+export function createProjectData(name, objects, settings, camera, target, animation = null) {
+  const sceneData = serializeScene(objects, settings);
+  if (animation) sceneData.animation = animation;
   return {
     format: 'creador3d',
     version: 1,
     app: 'Creador 3D',
     name: name || 'Mi creación',
     savedAt: new Date().toISOString(),
-    scene: serializeScene(objects, settings),
+    scene: sceneData,
     camera: camera ? {
       position: camera.position.toArray().map((n) => Math.round(n * 1000) / 1000),
       target: target ? target.toArray() : [0, 1.1, 0],
@@ -200,10 +212,24 @@ export function disposeTree(obj) {
 }
 
 export function cloneObject(obj) {
+  obj.traverse((child) => ensureUid(child));
   const clone = obj.clone(true);
   // Los materiales deben ser independientes para poder recolorear cada copia.
+  // Además, cada copia recibe identificadores nuevos para su propia animación.
   clone.traverse((child) => {
-    if (child.isMesh && !child.userData.isImage) {
+    if (child.userData) {
+      child.userData.uid = null;
+      ensureUid(child);
+    }
+    if (child.isMesh && child.userData.isDecal) {
+      child.material = child.material.clone();
+      if (child.material.map) {
+        child.material.map = child.material.map.clone();
+        child.material.map.needsUpdate = true;
+      }
+      child.castShadow = false;
+      child.receiveShadow = false;
+    } else if (child.isMesh && !child.userData.isImage) {
       child.material = createMaterial(serializeMaterial(child.material));
       if (child.userData.paint) {
         const data = serializePaint(child.userData.paint);

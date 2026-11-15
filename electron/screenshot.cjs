@@ -17,6 +17,10 @@ const root = path.join(__dirname, '..');
 const outDir = process.env.C3D_TEST_DIR || '/tmp/opencode/c3d-test';
 fs.mkdirSync(outDir, { recursive: true });
 
+// Perfil temporal limpio: las pruebas no deben tocar las creaciones reales.
+const testProfile = path.join(require('node:os').tmpdir(), 'creador-3d-test-profile');
+fs.rmSync(testProfile, { recursive: true, force: true });
+
 const defaultScript = `
 (async () => {
   const api = window.__C3D__;

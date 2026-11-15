@@ -1,9 +1,20 @@
 const { app, BrowserWindow, ipcMain, dialog, Menu, shell } = require('electron');
 const path = require('node:path');
 const fs = require('node:fs/promises');
+const {
+  checkForUpdates, downloadAndInstall, cancelDownload, launchUpdatedApp,
+  canSelfUpdate, getReleasesUrl,
+} = require('./updater.cjs');
 
 const isDev = process.argv.includes('--dev') || !!process.env.C3D_DEV;
+const isTest = !!process.env.C3D_TEST;
 let mainWindow = null;
+
+// Las pruebas automáticas usan un perfil temporal: nunca tocan las creaciones
+// reales guardadas en ~/.config/creador-3d.
+if (isTest) {
+  app.setPath('userData', path.join(app.getPath('temp'), 'creador-3d-test-profile'));
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -131,7 +142,36 @@ ipcMain.handle('app:info', async () => ({
   version: app.getVersion(),
   electron: process.versions.electron,
   chrome: process.versions.chrome,
+  canSelfUpdate: canSelfUpdate(),
+  isAppImage: Boolean(process.env.APPIMAGE),
 }));
+
+ipcMain.handle('updates:check', async () => checkForUpdates());
+
+ipcMain.handle('updates:install', async () => {
+  const result = await downloadAndInstall((progress) => {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('updates:progress', progress);
+    }
+  });
+  if (result.ok) {
+    if (mainWindow && !mainWindow.isDestroyed()) {
+      mainWindow.webContents.send('updates:progress', { phase: 'launching', version: result.version, percent: 100 });
+    }
+    setTimeout(() => {
+      launchUpdatedApp(result.path);
+      app.quit();
+    }, 900);
+  }
+  return result;
+});
+
+ipcMain.handle('updates:cancel', async () => cancelDownload());
+
+ipcMain.handle('updates:open-releases', async () => {
+  await shell.openExternal(getReleasesUrl());
+  return { ok: true };
+});
 
 app.whenReady().then(createWindow);
 

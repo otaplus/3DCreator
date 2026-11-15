@@ -290,6 +290,53 @@ export function createImagePlane(canvasOrDataUrl, spec = {}) {
   return mesh;
 }
 
+// Pegatinas pegadas a la superficie de un objeto: un plano orientado a la
+// normal de la cara. Se mueven con el objeto y se pueden arrastrar por encima.
+export function createEmojiDecal(emoji, spec = {}) {
+  const size = spec.size || 0.8;
+  const mat = new THREE.MeshBasicMaterial({
+    map: emojiTexture(emoji),
+    transparent: true,
+    side: THREE.DoubleSide,
+    toneMapped: false,
+    alphaTest: 0.01,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), mat);
+  mesh.scale.setScalar(size);
+  mesh.name = 'Pegatina ' + emoji;
+  mesh.userData.meta = { kind: 'sticker', emoji, decal: true, size };
+  mesh.userData.isDecal = true;
+  mesh.userData.isStickerDecal = true;
+  return mesh;
+}
+
+export function createImageDecal(dataUrl, spec = {}) {
+  const aspect = spec.aspect || 1;
+  const height = spec.size || 1.2;
+  const width = height * aspect;
+  const mat = new THREE.MeshBasicMaterial({
+    map: textureFromDataURL(dataUrl),
+    transparent: true,
+    side: THREE.DoubleSide,
+    toneMapped: false,
+    alphaTest: 0.01,
+    depthWrite: false,
+    polygonOffset: true,
+    polygonOffsetFactor: -2,
+    polygonOffsetUnits: -2,
+  });
+  const mesh = new THREE.Mesh(new THREE.PlaneGeometry(width, height), mat);
+  mesh.name = spec.name || 'Pegatina de imagen';
+  mesh.userData.meta = { kind: 'sticker', emoji: null, dataUrl, aspect, decal: true, size: height };
+  mesh.userData.isDecal = true;
+  mesh.userData.isStickerDecal = true;
+  return mesh;
+}
+
 // ===== Doodles =====
 export function createDoodle(points, radius, spec = {}) {
   const pts = points.map((p) => (p.isVector3 ? p.clone() : new THREE.Vector3(p.x, p.y, p.z)));
@@ -363,6 +410,7 @@ export function emojiForObject(obj) {
     if (meta.kind === 'sticker') return meta.emoji || '🖼️';
     if (meta.kind === 'image') return '🖼️';
     if (meta.kind === 'doodle') return '✏️';
+    if (meta.kind === 'group') return meta.emoji || '🧩';
   }
   if (obj.isGroup) return '📦';
   return '🧊';
@@ -377,6 +425,7 @@ export function kindLabel(obj) {
     case 'sticker': return 'Sticker';
     case 'image': return 'Dibujo';
     case 'doodle': return 'Doodle';
+    case 'group': return 'Grupo';
     default: return 'Objeto';
   }
 }
