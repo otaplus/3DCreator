@@ -1,8 +1,22 @@
 # Creador 3D
 
-Un estudio de creación 3D para Linux, en español y pensado para que cualquiera —también un niño de 12 años— pueda empezar a crear sin instrucciones complicadas. Toma lo mejor de Paint 3D para seleccionar y transformar objetos, y añade una línea de tiempo con fotogramas clave inspirada en Blender para animarlos. No necesita cuenta, conexión a internet ni conocimientos de modelado.
+Un estudio de creación 3D para **Linux y Windows**, en español y pensado para que cualquiera —también un niño de 12 años— pueda empezar a crear sin instrucciones complicadas. Toma lo mejor de Paint 3D para seleccionar y transformar objetos, y añade una línea de tiempo con fotogramas clave inspirada en Blender para animarlos. No necesita cuenta, conexión a internet ni conocimientos de modelado.
 
-![Hecho con Electron y Three.js](https://img.shields.io/badge/Electron%20%2B%20Three.js-3D-6c5ce7) ![Idioma: español](https://img.shields.io/badge/Idioma-espa%C3%B1ol-ff8a5c) ![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-17c3a2)
+![Hecho con Electron y Three.js](https://img.shields.io/badge/Electron%20%2B%20Three.js-3D-6c5ce7) ![Linux y Windows](https://img.shields.io/badge/Linux%20%2B%20Windows-escritorio-17c3a2) ![Idioma: español](https://img.shields.io/badge/Idioma-espa%C3%B1ol-ff8a5c) ![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-17c3a2)
+
+## Descargar e instalar
+
+### Windows
+
+Descarga el instalador para **Windows 10/11 de 64 bits**:
+
+**[Creador3D-1.0.0-Setup.exe](https://github.com/otaplus/3DCreator/releases/download/windows-1.0.0/Creador3D-1.0.0-Setup.exe)** · [todas las versiones](https://github.com/otaplus/3DCreator/releases)
+
+El instalador se instala para el usuario actual, crea accesos en el escritorio y el menú Inicio y no necesita Node.js ni permisos de administrador. No está firmado digitalmente: si Windows SmartScreen muestra un aviso, pulsa **Más información → Ejecutar de todos modos**.
+
+### Linux
+
+En Linux puedes ejecutarlo desde el código con `npm start`, crear e instalar el AppImage con `npm run install:local`, o abrir la interfaz en el navegador. Los detalles están más abajo.
 
 ## Qué puedes hacer
 
@@ -22,14 +36,17 @@ Un estudio de creación 3D para Linux, en español y pensado para que cualquiera
 
 ## Requisitos
 
-- Linux de 64 bits (probado en Linux Mint 22.3 X11).
-- Node.js 18 o superior y npm para ejecutarlo desde el código.
-- Unos 900 MB libres para dependencias y compilación; la aplicación instalada ocupa unos 130 MB.
+- Linux de 64 bits (probado en Linux Mint 22.3 X11) o **Windows 10/11 de 64 bits**.
+- Node.js 18 o superior y npm solo si ejecutas desde el código o compilas; los instaladores no los necesitan.
+- Unos 900 MB libres para dependencias y compilación; la aplicación instalada ocupa unos 130-200 MB.
 - No hace falta tarjeta gráfica dedicada; funciona con aceleración por software.
 
 ## Ejecutarlo desde el código
 
+Funciona en Linux y en Windows (PowerShell o CMD):
+
 ```bash
+git clone https://github.com/otaplus/3DCreator.git
 cd 3DCreator
 npm install
 npm start
@@ -41,9 +58,9 @@ npm start
 npm run dev
 ```
 
-## Instalarlo en el menú de aplicaciones
+## Instalarlo en Linux (AppImage)
 
-El instalador no usa `sudo`: crea el AppImage, lo copia a `~/Applications` y añade el lanzador y el icono para tu usuario.
+El instalador no usa `sudo`: crea el AppImage, lo copia a `~/Applications` y añade el lanzador y el icono para tu usuario. Para abrir el AppImage necesitas FUSE 2.
 
 ```bash
 npm run install:local
@@ -69,7 +86,22 @@ npm run uninstall:local
 
 Si además quieres borrar el autoguardado y la caché de la app, usa `bash scripts/desinstalar.sh --borrar-datos` y confirma escribiendo `SI`.
 
-## Crear el AppImage a mano
+## Instalarlo en Windows
+
+Descarga el instalador desde [Releases](https://github.com/otaplus/3DCreator/releases) o directamente:
+
+**[Creador3D-1.0.0-Setup.exe](https://github.com/otaplus/3DCreator/releases/download/windows-1.0.0/Creador3D-1.0.0-Setup.exe)**
+
+- Windows 10/11 de 64 bits.
+- Se instala para el usuario actual y crea accesos en el escritorio y el menú Inicio; no necesita permisos de administrador.
+- Tus proyectos y el autoguardado se guardan en `%APPDATA%\creador-3d` y se conservan al desinstalar.
+- El instalador no está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todos modos**.
+- Para desinstalar: **Configuración → Aplicaciones → Creador 3D**.
+- SHA-256 del instalador: `2775dd1719e02f07e41978c3189c3bd7cdcc1538ba1392b48269b7905ff2172e`.
+
+La publicación de Windows está marcada como **pre-release** porque el instalador aún no tiene firma de código.
+
+## Crear el AppImage de Linux a mano
 
 ```bash
 npm run dist
@@ -84,9 +116,22 @@ chmod +x "release/Creador 3D-1.0.0.AppImage"
 
 > Si el sistema no tiene FUSE 2, el AppImage se puede abrir con `--appimage-extract-and-run`.
 
+## Crear el instalador de Windows
+
+En un equipo Windows con Node.js:
+
+```bash
+npm install
+npm run dist:win
+```
+
+El resultado queda en `release/Creador3D-1.0.0-Setup.exe` y no está firmado digitalmente.
+
+También puedes lanzar el workflow **Build Windows installer** desde la pestaña **Actions** de GitHub (o con `gh workflow run build-windows.yml`) y descargar el artefacto `creador-3d-windows`. Compilar NSIS desde Linux requiere Wine; lo más sencillo es usar Windows o GitHub Actions.
+
 ## Usar sin instalar (modo navegador)
 
-La interfaz también funciona abriendo `dist/index.html` en un navegador moderno, sin Electron. En ese modo no hay diálogos nativos de archivo: las descargas y la apertura de proyectos usan las funciones del navegador. Para generarlo:
+La interfaz también funciona en Linux y Windows abriendo `dist/index.html` en un navegador moderno, sin Electron. En ese modo no hay diálogos nativos de archivo: las descargas y la apertura de proyectos usan las funciones del navegador. Para generarlo:
 
 ```bash
 npm run build
@@ -141,19 +186,25 @@ Los stickers e imágenes decorativas se incluyen en el PNG y en el vídeo WebM, 
 
 ## Dónde se guarda todo
 
-- El **autoguardado** vive en el almacenamiento local de la aplicación (`~/.config/creador-3d`). Al volver a abrirla, tu última creación aparece sola.
+- El **autoguardado** vive en el almacenamiento local de la aplicación. En Linux está en `~/.config/creador-3d`; en Windows, en `%APPDATA%\creador-3d`. Al volver a abrirla, tu última creación aparece sola.
 - Los proyectos `.c3d` y las exportaciones se guardan donde tú elijas.
 - No hay cuentas, servidores ni telemetría: todo se queda en tu equipo.
+
+## Actualizaciones
+
+- **Linux (AppImage):** la aplicación integra un actualizador que consulta GitHub Releases y descarga el nuevo AppImage.
+- **Windows:** descarga el instalador nuevo desde [Releases](https://github.com/otaplus/3DCreator/releases). La actualización automática integrada está pensada para el AppImage de Linux; en Windows se instala la versión nueva encima de la anterior.
 
 ## Estructura del proyecto
 
 ```
 3DCreator/
+├── .github/workflows/   Compilación automática del instalador de Windows
 ├── src/                 Interfaz, escena Three.js y herramientas
 │   ├── main.js          Arranque, UI, selección, pintura, historial y pruebas
 │   ├── animation.js     Motor de animación: pistas, claves e interpolación
-│   ├── manipulator.js   Anillo, esquinas y flecha de selección estilo Paint 3D
-│   ├── timeline.js      Línea de tiempo, reproducción y edición de claves
+│   ├── manipulator.js   Caja 2D, giros Z/X/Y, profundidad y redimensionado
+│   ├── timeline.js      Línea de tiempo, FPS, fotogramas y edición de claves
 │   ├── shapes.js        Primitivas, materiales, texto, stickers y doodles
 │   ├── templates.js     Las 12 plantillas y sus piezas
 │   ├── textures.js      Paleta, patrones, emojis y capa de pintura UV
@@ -161,12 +212,12 @@ Los stickers e imágenes decorativas se incluyen en el PNG y en el vídeo WebM, 
 │   ├── exporters.js     Exportación GLB, OBJ, STL y PNG
 │   ├── editor2d.js      Editor de dibujo 2D y recorte mágico de fondo
 │   └── io.js            Archivos nativos (Electron) o descargas (navegador)
-├── electron/            Ventana de escritorio, IPC y pruebas automáticas
+├── electron/            Ventana de escritorio, IPC, actualizador y pruebas
 ├── assets/fonts/        Fuente 3D con tildes y eñes
-├── build/               Iconos de la aplicación
-├── scripts/             Instalador, desinstalador y utilidades
+├── build/               Iconos de la aplicación (PNG e ICO)
+├── scripts/             Instalador de Linux y utilidades
 ├── dist/                Resultado de la compilación (se genera)
-└── release/             AppImage y paquete Linux (se genera)
+└── release/             AppImage de Linux e instalador de Windows (se genera)
 ```
 
 ## Pruebas
@@ -175,11 +226,13 @@ Los stickers e imágenes decorativas se incluyen en el PNG y en el vídeo WebM, 
 npm run test:ui
 ```
 
-El comando compila la app, la abre en Electron, recorre plantillas, formas, pintura, doodles, texto, deshacer/rehacer, guardado, exportaciones y el editor 2D, y escribe capturas y un informe en `/tmp/opencode/c3d-test`. La API interna `window.__C3D__` también permite probar la selección múltiple, el manipulador, los fotogramas clave y la reproducción. Las pruebas usan un perfil temporal aparte, así que no tocan tus creaciones guardadas. También se puede abrir `dist/index.html` directamente para comprobar el modo navegador.
+El comando compila la app, la abre en Electron, recorre plantillas, formas, pintura, doodles, texto, deshacer/rehacer, guardado, exportaciones y el editor 2D, y escribe capturas y un informe en la carpeta temporal del sistema: `/tmp/opencode/c3d-test` en Linux y `%TEMP%\opencode\c3d-test` en Windows. Puedes cambiarla con `C3D_TEST_DIR`. La API interna `window.__C3D__` también permite probar la selección múltiple, el manipulador, los fotogramas clave y la reproducción. Las pruebas usan un perfil temporal aparte, así que no tocan tus creaciones guardadas. También se puede abrir `dist/index.html` directamente para comprobar el modo navegador.
 
 ## Problemas frecuentes
 
+- **Windows SmartScreen avisa al abrir el instalador:** es porque aún no está firmado digitalmente. Pulsa **Más información → Ejecutar de todos modos**.
 - **El AppImage no arranca:** comprueba que tiene permisos de ejecución (`chmod +x`) y que FUSE 2 está instalado. Como alternativa, ejecútalo con `--appimage-extract-and-run`.
+- **No aparecen actualizaciones automáticas en Windows:** es normal; descarga el instalador nuevo desde [Releases](https://github.com/otaplus/3DCreator/releases).
 - **La ventana se ve pequeña:** el tamaño mínimo es 1080 × 680; usa `F11` para pantalla completa o maximiza la ventana.
 - **Va lento en un equipo antiguo:** baja el tamaño de la ventana, oculta la cuadrícula y evita el ambiente de nieve, que tiene más partículas.
 - **Quiero empezar de cero:** usa **Nueva creación**. La escena anterior se puede recuperar con `Ctrl` + `Z` mientras no cierres la aplicación.

@@ -3,7 +3,7 @@
  *
  * Lanza la app en modo captura, ejecuta un pequeño guion dentro de la
  * ventana y guarda una captura y los mensajes de consola en la carpeta
- * indicada por C3D_TEST_DIR (por defecto /tmp/opencode/c3d-test).
+ * indicada por C3D_TEST_DIR (por defecto, la carpeta temporal del sistema).
  *
  * Uso:
  *   npm run test:ui
@@ -11,14 +11,15 @@
  */
 const { spawn } = require('node:child_process');
 const fs = require('node:fs');
+const os = require('node:os');
 const path = require('node:path');
 
 const root = path.join(__dirname, '..');
-const outDir = process.env.C3D_TEST_DIR || '/tmp/opencode/c3d-test';
+const outDir = process.env.C3D_TEST_DIR || path.join(os.tmpdir(), 'opencode', 'c3d-test');
 fs.mkdirSync(outDir, { recursive: true });
 
 // Perfil temporal limpio: las pruebas no deben tocar las creaciones reales.
-const testProfile = path.join(require('node:os').tmpdir(), 'creador-3d-test-profile');
+const testProfile = path.join(os.tmpdir(), 'creador-3d-test-profile');
 fs.rmSync(testProfile, { recursive: true, force: true });
 
 const defaultScript = `
@@ -40,7 +41,9 @@ process.env.C3D_TEST_DIR = outDir;
 if (!process.env.C3D_TEST_SHOT) process.env.C3D_TEST_SHOT = 'shot.png';
 
 const electronBin = require('electron');
-const child = spawn(electronBin, [root, '--no-sandbox'], {
+const electronArgs = [root];
+if (process.platform === 'linux') electronArgs.push('--no-sandbox');
+const child = spawn(electronBin, electronArgs, {
   cwd: root,
   env: process.env,
   stdio: 'inherit',
