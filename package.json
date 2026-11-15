@@ -12,6 +12,7 @@
     "dev": "npm run build && electron . --dev",
     "test:ui": "npm run build && node electron/screenshot.cjs",
     "dist": "npm run build && electron-builder --linux AppImage",
+    "dist:win": "npm run build && electron-builder --win nsis --publish never",
     "install:local": "bash scripts/instalar.sh",
     "uninstall:local": "bash scripts/desinstalar.sh"
   },
@@ -34,6 +35,7 @@
       "dist/**/*",
       "electron/main.cjs",
       "electron/preload.cjs",
+      "electron/updater.cjs",
       "build/icon.png",
       "package.json"
     ],
@@ -44,6 +46,25 @@
       "syncDesktopName": true,
       "synopsis": "Estudio de creación 3D para toda la familia",
       "description": "Crea, pinta y decora modelos 3D con plantillas, doodles, stickers y texto. Inspirado en Paint 3D."
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "build/icon.ico",
+      "artifactName": "Creador3D-${version}-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Creador 3D",
+      "deleteAppDataOnUninstall": false
     }
   }
 }
