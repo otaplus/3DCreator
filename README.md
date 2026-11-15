@@ -97,7 +97,7 @@ Descarga el instalador desde [Releases](https://github.com/otaplus/3DCreator/rel
 - Tus proyectos y el autoguardado se guardan en `%APPDATA%\creador-3d` y se conservan al desinstalar.
 - El instalador no está firmado: si SmartScreen avisa, pulsa **Más información → Ejecutar de todos modos**.
 - Para desinstalar: **Configuración → Aplicaciones → Creador 3D**.
-- SHA-256 del instalador: `2775dd1719e02f07e41978c3189c3bd7cdcc1538ba1392b48269b7905ff2172e`.
+- SHA-256 del instalador: `7f87e2e5b588b6cdcf792c2ccab72964cdbb00e5e981040613bd6cf716ab74f0`.
 
 La publicación de Windows está marcada como **pre-release** porque el instalador aún no tiene firma de código.
 
