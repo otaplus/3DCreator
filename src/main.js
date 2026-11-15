@@ -3890,7 +3890,7 @@ function openWelcome() {
     onClose: rememberWelcomeSeen,
     body: `
       <div class="welcome-features">
-        <div class="wf-card"><div class="wf-emoji">🏠</div><div class="wf-title">12 plantillas</div><div class="wf-sub">Casas, robots, dinosaurios, unicornios y mucho más.</div></div>
+        <div class="wf-card"><div class="wf-emoji">🏠</div><div class="wf-title">14 plantillas</div><div class="wf-sub">Casas, robots, dinosaurios, unicornios, muñecos y mucho más.</div></div>
         <div class="wf-card"><div class="wf-emoji">🖌️</div><div class="wf-title">Elige y transforma</div><div class="wf-sub">Caja 2D con tiradores: gira en Z, X e Y, cambia la profundidad y redimensiona.</div></div>
         <div class="wf-card"><div class="wf-emoji">🎬</div><div class="wf-title">Anima y comparte</div><div class="wf-sub">Línea de tiempo con fotogramas clave y vídeo WebM.</div></div>
       </div>

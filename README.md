@@ -20,7 +20,7 @@ En Linux puedes ejecutarlo desde el código con `npm start`, crear e instalar el
 
 ## Qué puedes hacer
 
-- **Empezar con una plantilla:** casa, robot, coche, cohete, gato, unicornio, árbol, castillo, dinosaurio, avión, muñeco de nieve y flor. Cada pieza se puede seleccionar, pintar y cambiar por separado.
+- **Empezar con una plantilla:** casa, robot, coche, cohete, gato, unicornio, árbol, castillo, dinosaurio, avión, muñeco de nieve, muñeca, muñeco y flor. Cada pieza se puede seleccionar, pintar y cambiar por separado.
 - **Añadir formas:** 12 primitivas (cubo, esfera, cilindro, cono, dona, cápsula, pirámide, prisma, estrella, corazón, diamante y rampa), todas redimensionables.
 - **Pintar en 3D:** pinta directamente sobre los objetos con pincel o borrador, elige colores, patrones y materiales (mate, satinado, brillante, metal, cristal y neón).
 - **Dibujar en el aire:** crea tubos 3D con la herramienta Doodle.
@@ -206,7 +206,7 @@ Los stickers e imágenes decorativas se incluyen en el PNG y en el vídeo WebM, 
 │   ├── manipulator.js   Caja 2D, giros Z/X/Y, profundidad y redimensionado
 │   ├── timeline.js      Línea de tiempo, FPS, fotogramas y edición de claves
 │   ├── shapes.js        Primitivas, materiales, texto, stickers y doodles
-│   ├── templates.js     Las 12 plantillas y sus piezas
+│   ├── templates.js     Las 14 plantillas y sus piezas
 │   ├── textures.js      Paleta, patrones, emojis y capa de pintura UV
 │   ├── project.js       Serialización y restauración de proyectos
 │   ├── exporters.js     Exportación GLB, OBJ, STL y PNG
